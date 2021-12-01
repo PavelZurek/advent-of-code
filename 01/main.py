@@ -23,13 +23,6 @@ first()
 
 # Second part
 
-def sum(i, numbers):
-	suma = 0
-	for j in range(i,i+3):
-		suma = suma + numbers[j]
-	return suma
-
-
 def second():
 	result = 0
 
@@ -42,12 +35,14 @@ def second():
 
 		numbers.append(int(line))
 
-	for i in range(0, len(numbers)-3):
-		if(sum(i, numbers) < sum(i+1, numbers)):
+		if(len(numbers) > 4):
+			numbers.pop(0)
+		elif(len(numbers) < 4):
+			continue
+
+		if(sum(numbers[:-1]) < sum(numbers[1:])):
 			result = result + 1
 
-
 	print("Second: {}".format(result))
-
 
 second()

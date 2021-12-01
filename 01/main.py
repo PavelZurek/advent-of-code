@@ -25,23 +25,22 @@ first()
 
 def second():
 	result = 0
-
-	file = open("data.txt", "r")
 	numbers = []
 
-	for line in file:
-		if line == "" or line == '\n':
-			break
+	with open("data.txt", "r") as file:
+		line = file.readline()
 
-		numbers.append(int(line))
+		while line != "":
+			numbers.append(int(line))
+			line = file.readline()
 
-		if(len(numbers) > 4):
-			numbers.pop(0)
-		elif(len(numbers) < 4):
-			continue
+			if(len(numbers) > 4):
+				numbers.pop(0)
+			elif(len(numbers) < 4):
+				continue
 
-		if(sum(numbers[:-1]) < sum(numbers[1:])):
-			result = result + 1
+			if(sum(numbers[:-1]) < sum(numbers[1:])):
+				result = result + 1
 
 	print("Second: {}".format(result))
 

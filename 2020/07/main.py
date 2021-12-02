@@ -1,6 +1,4 @@
-# First part
-
-def first():
+def getRules():
     rules = []
 
     with open("data.txt", "r") as file:
@@ -19,7 +17,13 @@ def first():
                     rule['content'].append({ 'count': int(tmp[0]), 'name': ' '.join(tmp[1:]) })
     
             rules.append(rule)
+            
+    return rules
 
+# First part
+
+def first():
+    rules = getRules()
     old_count = 0;
     valid_colors = ['shiny gold']
 
@@ -40,9 +44,22 @@ first()
 
 # Second part
 
+def getBagContentCount(rules, bags):
+    result = 0;
+    
+    for rule in rules:
+        if rule.get('name') in bags:
+            if len(rule.get('content')) == 0:
+                return 0
+            for content in rule.get('content'):
+                content_count = getBagContentCount(rules, content.get('name'))
+                result = result + content.get('count') * (content_count + 1)
+
+    return result
+
 def second():
-	result = 0
+    result = getBagContentCount(getRules(), ['shiny gold'])
 
-	print("Second: {}".format(result))
+    print("Second: {}".format(result))
 
-#second()
+second()

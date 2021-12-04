@@ -1,5 +1,3 @@
-# First part
-
 def loadData():
     called_numbers = []
     boards = []
@@ -36,9 +34,7 @@ def isBoardWinning(board):
 
     return False
 
-def getWinningBoard():
-    called_numbers, boards = loadData()
-
+def getWinningBoardIndex(called_numbers, boards):
     for num in called_numbers:
         for bn in range(len(boards)):
             for i in range(len(boards[bn])):
@@ -46,18 +42,27 @@ def getWinningBoard():
                     if boards[bn][i][j] == num:
                         boards[bn][i][j] = 'X'
                         if isBoardWinning(boards[bn]):
-                            return [boards[bn], num]
+                            return [bn, num]
 
-def first():
-    board, num = getWinningBoard()
-    
+def getBoardSum(board):
     board_sum = 0
+
     for i in range(len(board)):
         for j in range(len(board[i])):
             if board[i][j].isdigit():
                 board_sum += int(board[i][j])
+    
+    return board_sum
 
-    result = board_sum * int(num)
+# First part
+
+def first():
+    called_numbers, boards = loadData()
+
+    boardId, num = getWinningBoardIndex(called_numbers, boards)
+    board = boards[boardId]
+
+    result = getBoardSum(board) * int(num)
     print("First: {}".format(result))
 
 first()
@@ -65,7 +70,19 @@ first()
 # Second part
 
 def second():
-    result = 0
+    called_numbers, boards = loadData()
+    board = None
+
+    while len(boards) > 0:
+        boardId, num = getWinningBoardIndex(called_numbers, boards)
+
+        board = boards[boardId] 
+        del boards[boardId]
+        
+        while called_numbers[0] != num:
+            del called_numbers[0]
+
+    result = getBoardSum(board) * int(num)
     print("Second: {}".format(result))
 
 second()

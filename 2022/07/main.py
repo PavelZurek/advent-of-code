@@ -1,31 +1,4 @@
-# First part
-
-def recalculateParentSizes(node):
-    node["size"] = 0
-    for childKey in node["children"]:
-        childNode = node["children"][childKey]
-        if type(childNode) == int:
-            node["size"] += childNode
-        else:
-            node["size"] += childNode["size"]
-
-    if "parent" in node.keys():
-        recalculateParentSizes(node["parent"])
-
-def addAllDirSizesAbove(node, above = 100000):
-    totalSize = 0
-
-    if node["size"] < above:
-        totalSize = node["size"]
-
-    for childKey in node["children"]:
-        childNode = node["children"][childKey]
-        if type(childNode) != int:
-            totalSize += addAllDirSizesAbove(childNode)
-
-    return totalSize
-
-def first():
+def loadTree():
     tree = {
         "size": 0,
         "children": {}
@@ -63,6 +36,37 @@ def first():
                 # Recalculate sizes of all parents
                 recalculateParentSizes(cursor)
 
+    return tree
+
+def recalculateParentSizes(node):
+    node["size"] = 0
+    for childKey in node["children"]:
+        childNode = node["children"][childKey]
+        if type(childNode) == int:
+            node["size"] += childNode
+        else:
+            node["size"] += childNode["size"]
+
+    if "parent" in node.keys():
+        recalculateParentSizes(node["parent"])
+
+# First part
+
+def addAllDirSizesAbove(node, above = 100000):
+    totalSize = 0
+
+    if node["size"] < above:
+        totalSize = node["size"]
+
+    for childKey in node["children"]:
+        childNode = node["children"][childKey]
+        if type(childNode) != int:
+            totalSize += addAllDirSizesAbove(childNode)
+
+    return totalSize
+
+def first():
+    tree = loadTree()
     result = addAllDirSizesAbove(tree)
     print("First: {}".format(result))
 
@@ -70,8 +74,21 @@ first()
 
 # Second part
 
+def findSmallestDir(node, minSize):
+    minNode = node
+
+    for childKey in node["children"]:
+        childNode = node["children"][childKey]
+        if type(childNode) != int:
+            minChildNode = findSmallestDir(childNode, minSize)
+            if minChildNode["size"] < minNode["size"] and minChildNode["size"] > minSize:
+                minNode = minChildNode
+
+    return minNode
+
 def second():
-    result = 0
+    tree = loadTree()
+    result = findSmallestDir(tree, tree["size"] - 40000000)["size"]
     print("Second: {}".format(result))
 
-#second()
+second()

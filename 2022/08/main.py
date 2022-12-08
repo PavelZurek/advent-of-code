@@ -1,12 +1,16 @@
-# First part
-
-def first():
+def getTreeMap():
     treeMap = []
 
     with open("data.txt", "r") as file:
         for line in file:
             treeMap.append(list(line.strip(" \n")))
 
+    return treeMap
+
+# First part
+
+def first():
+    treeMap = getTreeMap()
     result = 0
 
     for x in range(0, len(treeMap)):
@@ -53,7 +57,42 @@ first()
 # Second part
 
 def second():
+    treeMap = getTreeMap()
     result = 0
+
+    for x in range(0, len(treeMap)):
+        for y in range(0, len(treeMap[x])):
+            treeHeight = treeMap[x][y]
+
+            # Check
+            visibleX1 = 0
+            for i in reversed(range(0, x)):
+                visibleX1 += 1
+                if treeMap[i][y] >= treeHeight:
+                    break
+
+            visibleX2 = 0
+            for i in range(x+1, len(treeMap)):
+                visibleX2 += 1
+                if treeMap[i][y] >= treeHeight:
+                    break
+
+            visibleY1 = 0
+            for i in reversed(range(0, y)):
+                visibleY1 += 1
+                if treeMap[x][i] >= treeHeight:
+                    break
+
+            visibleY2 = 0
+            for i in range(y+1, len(treeMap[x])):
+                visibleY2 += 1
+                if treeMap[x][i] >= treeHeight:
+                    break
+
+            score = visibleX1 * visibleX2 * visibleY1 * visibleY2
+            if score > result:
+                result = score
+
     print("Second: {}".format(result))
 
-#second()
+second()

@@ -36,6 +36,26 @@ first()
 
 def second():
     result = 0
+    cardsWon = {}
+
+    with open("data.txt", "r") as file:
+        cardId = 0
+        for line in file:
+            cardId += 1
+            card = Card(line)
+            if cardId not in cardsWon:
+                cardsWon[cardId] = 1
+
+            for i in range(0, card.getWinningTipCount()):
+                nextCardId = i + cardId + 1
+                if nextCardId not in cardsWon:
+                    cardsWon[nextCardId] = 1
+                if (cardId in cardsWon):
+                    cardsWon[nextCardId] += cardsWon[cardId]
+
+            if cardId in cardsWon:
+                result += cardsWon.pop(cardId)
+
     print("Second: {}".format(result))
 
-#second()
+second()

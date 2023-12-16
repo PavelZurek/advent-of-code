@@ -1,5 +1,3 @@
-# First part
-
 class Direction:
     UP = 'up'
     RIGHT = 'right'
@@ -27,20 +25,8 @@ def getBeamInDirection(coords, direction):
 def coordsNotOutOfBound(field, coords):
     return coords[0] in range(0, len(field)) and coords[1] in range(0, len(field[0]))
 
-def first():
-    field = []
-
-    with open("data.txt", "r") as file:
-        for line in file:
-            field.append(line.strip())
-
-    beamEnds = [
-        {
-            'coords': [0, 0],
-            'direction': Direction.RIGHT,
-        }
-    ]
-
+def getEnergizedCoords(field, startBeam):
+    beamEnds = [startBeam]
     allBeams = [beamEnds[0]]
     allVisitedCoords = [beamEnds[0]['coords']]
 
@@ -88,7 +74,23 @@ def first():
 
         beamEnds = newEnds
 
-    result = len(allVisitedCoords)
+    return allVisitedCoords
+
+# First part
+
+def first():
+    field = []
+
+    with open("data.txt", "r") as file:
+        for line in file:
+            field.append(line.strip())
+
+    energizedCoords = getEnergizedCoords(field, {
+        'coords': [0, 0],
+        'direction': Direction.RIGHT,
+    })
+
+    result = len(energizedCoords)
     print("First: {}".format(result))
 
 first()
@@ -96,7 +98,40 @@ first()
 # Second part
 
 def second():
+    field = []
+
+    with open("data.txt", "r") as file:
+        for line in file:
+            field.append(line.strip())
+
+    allStartBeams = []
+    for i in range(0, len(field)):
+        allStartBeams.append({
+            'coords': [0, i],
+            'direction': Direction.DOWN,
+        })
+    for i in range(0, len(field)):
+        allStartBeams.append({
+            'coords': [len(field[i])-1, i],
+            'direction': Direction.UP,
+        })
+    for i in range(0, len(field[0])):
+        allStartBeams.append({
+            'coords': [i, 0],
+            'direction': Direction.RIGHT,
+        })
+    for i in range(0, len(field[0])):
+        allStartBeams.append({
+            'coords': [i, len(field)-1],
+            'direction': Direction.LEFT,
+        })
+
     result = 0
+    for startBeam in allStartBeams:
+        length = len(getEnergizedCoords(field, startBeam))
+        if length > result:
+            result = length
+
     print("Second: {}".format(result))
 
-#second()
+second()

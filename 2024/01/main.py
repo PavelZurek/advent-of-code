@@ -1,6 +1,4 @@
-# First part
-
-def first():
+def getLists():
     lists = [[], []]
 
     with open("data.txt", "r") as file:
@@ -9,6 +7,12 @@ def first():
             lists[0].append(a)
             lists[1].append(b)
 
+    return lists
+
+# First part
+
+def first():
+    lists = getLists()
     lists[0].sort()
     lists[1].sort()
 
@@ -24,7 +28,12 @@ first()
 # Second part
 
 def second():
+    lists = getLists()
     result = 0
+
+    for i in range(0, len(lists[0])):
+        result += lists[0][i] * lists[1].count(lists[0][i])
+
     print("Second: {}".format(result))
 
-#second()
+second()

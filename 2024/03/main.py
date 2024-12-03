@@ -15,7 +15,23 @@ first()
 # Second part
 
 def second():
-    result = 0
-    print("Second: {}".format(result))
+    with open("data.txt", "r") as file:
+        line = file.read().strip()
+        instructions = re.findall(r"mul\(\d{1,3}\,\d{1,3}\)|do\(\)|don\'t\(\)", line)
 
-#second()
+        result = 0
+        add = True
+
+        for instruction in instructions:
+            if instruction == 'don\'t()':
+                add = False
+            elif instruction == 'do()':
+                add = True
+            else:
+                if add:
+                    mul_instruction_params = list(map(int, [re.sub('[^\d\.]', '', y) for y in instruction.split(',')]))
+                    result += mul_instruction_params[0]*mul_instruction_params[1]
+
+        print("Second: {}".format(result))
+
+second()

@@ -1,3 +1,12 @@
+def loadData():
+    data = []
+
+    with open("data.txt", "r") as file:
+        for line in file:
+            data.append(line.strip())
+
+    return data
+
 # First part
 
 from enum import Enum
@@ -14,12 +23,7 @@ class Direction(Enum):
 word = 'XMAS'
 
 def first():
-    data = []
-
-    with open("data.txt", "r") as file:
-        for line in file:
-            data.append(line.strip())
-
+    data = loadData()
     result = 0
 
     for i in range(0, len(data)):
@@ -61,7 +65,21 @@ first()
 # Second part
 
 def second():
+    data = loadData()
     result = 0
+
+    for i in range(1, len(data)-1):
+        for j in range(1, len(data[i])-1):
+            if data[i][j] == 'A':
+                if data[i-1][j-1] == 'M' and data[i+1][j+1] == 'S' and data[i+1][j-1] == 'M' and data[i-1][j+1] == 'S':
+                    result += 1
+                if data[i-1][j-1] == 'M' and data[i+1][j+1] == 'S' and data[i+1][j-1] == 'S' and data[i-1][j+1] == 'M':
+                    result += 1
+                if data[i-1][j-1] == 'S' and data[i+1][j+1] == 'M' and data[i+1][j-1] == 'M' and data[i-1][j+1] == 'S':
+                    result += 1
+                if data[i-1][j-1] == 'S' and data[i+1][j+1] == 'M' and data[i+1][j-1] == 'S' and data[i-1][j+1] == 'M':
+                    result += 1
+
     print("Second: {}".format(result))
 
-#second()
+second()

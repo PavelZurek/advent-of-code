@@ -1,5 +1,3 @@
-# First part
-
 def printMap(size, antenasByFrequence, antinodes):
     print('Size:', size)
     print('Antenas:', antenasByFrequence)
@@ -17,7 +15,7 @@ def printMap(size, antenasByFrequence, antinodes):
             print(map[i][j], end='')
         print()
 
-def first():
+def loadMap():
     mapSize = [0, 0]
     antenasByFrequence = {}
 
@@ -33,6 +31,13 @@ def first():
                         antenasByFrequence[line[j]] = []
                     antenasByFrequence[line[j]].append([i, j])
             i+=1
+    
+    return [mapSize, antenasByFrequence]
+
+# First part
+
+def first():
+    [mapSize, antenasByFrequence] = loadMap()
 
     antinodes = []
     for _, antenas in antenasByFrequence.items():
@@ -58,7 +63,25 @@ first()
 # Second part
 
 def second():
-    result = 0
+    [mapSize, antenasByFrequence] = loadMap()
+
+    antinodes = []
+    for _, antenas in antenasByFrequence.items():
+        for i in range(len(antenas)):
+            for j in range(i, len(antenas)):
+                if i != j:
+                    distance = [antenas[i][0] - antenas[j][0], antenas[i][1] - antenas[j][1]]
+
+                    for [antena, multiplier] in [[antenas[i], 1],[antenas[j], -1]]:
+                        newAntinode = [antena[0], antena[1]]
+                        while newAntinode[0] in range(0, mapSize[0]) and newAntinode[1] in range(0, mapSize[0]):
+                            if newAntinode not in antinodes:
+                                antinodes.append(newAntinode)
+                            newAntinode = [newAntinode[0] + distance[0] * multiplier, newAntinode[1] + distance[1] * multiplier]
+
+    #printMap(mapSize, antenasByFrequence, antinodes)
+
+    result = len(antinodes)
     print("Second: {}".format(result))
 
-#second()
+second()

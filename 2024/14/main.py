@@ -1,35 +1,4 @@
-# First part
-
 mapSize = [101, 103]
-
-def strigifyPos(pos):
-    return ','.join(map(str, pos))
-
-def posFromString(pos):
-    return list(map(int, pos.split(',')))
-
-def getRobotCounts(robots):
-    robotCounts = {}
-
-    for robot in robots:
-        key = strigifyPos(robot.pos)
-        if key not in robotCounts:
-            robotCounts[key] = 0
-        robotCounts[key] += 1
-
-    return robotCounts
-
-def printMap(robots):
-    robotCounts = getRobotCounts(robots)
-
-    for i in range(mapSize[1]):
-        for j in range(mapSize[0]):
-            key = strigifyPos([j, i])
-            if key in robotCounts:
-                print(robotCounts[key] , end='')
-            else:
-                print('.', end='')
-        print()
 
 class Robot():
     def __init__(self, line):
@@ -43,12 +12,48 @@ class Robot():
             (self.pos[1] + self.vel[1]) % mapSize[1]
         ]
 
-def first():
+def loadRobots():
     robots = []
 
     with open("data.txt", "r") as file:
         for line in file:
             robots.append(Robot(line))
+
+    return robots
+
+def strigifyPos(pos):
+    return ','.join(map(str, pos))
+
+def posFromString(pos):
+    return list(map(int, pos.split(',')))
+
+def printMap(robots):
+    robotCounts = getRobotCounts(robots)
+
+    for i in range(mapSize[1]):
+        for j in range(mapSize[0]):
+            key = strigifyPos([j, i])
+            if key in robotCounts:
+                print(robotCounts[key] , end='')
+            else:
+                print('.', end='')
+        print()
+
+# First part
+
+def getRobotCounts(robots):
+    robotCounts = {}
+
+    for robot in robots:
+        key = strigifyPos(robot.pos)
+        if key not in robotCounts:
+            robotCounts[key] = 0
+        robotCounts[key] += 1
+
+    return robotCounts
+
+def first():
+    robots = loadRobots()
 
     for _ in range(100):
         for robot in robots:
@@ -82,8 +87,35 @@ first()
 
 # Second part
 
+def detectLine(robots, length):
+    robotCounts = getRobotCounts(robots)
+    line = False
+
+    for i in range(mapSize[1]):
+        lineLen = 0
+        for j in range(mapSize[0]):
+            key = strigifyPos([j, i])
+            if key in robotCounts:
+                lineLen += 1
+                if lineLen >= length:
+                    line = True
+            else:
+                lineLen = 0
+
+    return line
+
 def second():
+    robots = loadRobots()
     result = 0
+
+    lineDetected = False
+    while not lineDetected:
+        result += 1
+        for robot in robots:
+            robot.move(mapSize)
+        lineDetected = detectLine(robots, 10)
+
+    #printMap(robots)
     print("Second: {}".format(result))
 
-#second()
+second()

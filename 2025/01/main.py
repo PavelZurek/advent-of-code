@@ -27,6 +27,21 @@ first()
 
 def second():
     result = 0
+    dial = 50
+
+    with open("data.txt", "r") as file:
+        for line in file:
+            dial_move = int(line[1:])
+
+            if line[0] == 'L':
+                result += (dial-1)//100 - (dial-dial_move-1)//100
+                dial -= dial_move
+            elif line[0] == 'R':
+                result += (dial+dial_move)//100 - dial//100
+                dial += dial_move
+
+            dial = dial%100
+
     print("Second: {}".format(result))
 
-#second()
+second()

@@ -22,6 +22,22 @@ first()
 
 def second():
     result = 0
+
+    with open("data.txt", "r") as file:
+        for line in file:
+            line = line.strip()
+
+            to_remove = len(line) - 12
+            stack = []
+
+            for digit in line:
+                while to_remove > 0 and stack and stack[-1] < digit:
+                    stack.pop()
+                    to_remove -= 1
+                stack.append(digit)
+
+            result += int(''.join(stack[:12]))
+
     print("Second: {}".format(result))
 
-#second()
+second()
